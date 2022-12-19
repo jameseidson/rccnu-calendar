@@ -4,13 +4,11 @@
 </script>
 
 <div class="grid place-items-center h-screen">
-  <div
-    class="card place-items-center p-4 space-y-4 w-100 bg-neutral shadow-xl "
-  >
-    <img class="max-w-sm" src={logo} alt="RCCNU logo" />
+  <div class="card place-items-center p-4 m-4 space-y-4 bg-neutral shadow-xl ">
+    <img class="w-96 max-w-full" src={logo} alt="RCCNU logo" />
     <div
       class="tooltip tooltip-info w-full"
-      data-tip="Please sign in with your NU email!"
+      data-tip="Please use your Northwestern email!"
     >
       <button on:click={googleSignIn} class="btn btn-primary btn-block"
         >Sign In</button
