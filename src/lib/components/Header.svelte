@@ -7,7 +7,7 @@
 </script>
 
 <div class="grid place-items-center">
-  <div class="navbar bg-neutral w-11/12 my-5 rounded-lg">
+  <div class="navbar bg-neutral my-5 rounded-lg shadow-lg">
     <div class="flex-1">
       <a class="btn btn-ghost btn-lg p-0" href="/">
         <img class="h-full" src={logo} alt="RCCNU logo" />
