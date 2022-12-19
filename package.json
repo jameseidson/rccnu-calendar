@@ -24,6 +24,7 @@
 	"type": "module",
 	"dependencies": {
 		"daisyui": "^2.45.0",
-		"firebase": "^9.15.0"
+		"firebase": "^9.15.0",
+		"svelte-heros-v2": "^0.3.10"
 	}
 }

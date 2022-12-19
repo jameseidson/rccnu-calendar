@@ -5,6 +5,13 @@ import { vitePreprocess } from "@sveltejs/kit/vite";
 const config = {
   preprocess: vitePreprocess(),
 
+  onwarn: (warning, handler) => {
+    if (warning.code.startsWith("a11y-")) {
+      return;
+    }
+    handler(warning);
+  },
+
   kit: {
     adapter: adapter(),
   },
