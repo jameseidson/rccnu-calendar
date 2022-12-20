@@ -1,1 +1,5 @@
-<h1>Homepage</h1>
+<script lang="ts">
+  import ClimbList from "$lib/components/ClimbList.svelte";
+</script>
+
+<ClimbList />
