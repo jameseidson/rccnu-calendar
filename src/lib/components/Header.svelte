@@ -1,8 +1,7 @@
 <script lang="ts">
   import { ArrowLeftOnRectangle } from "svelte-heros-v2";
 
-  import { user } from "$lib/utilities/stores";
-  import { googleSignOut } from "$lib/utilities/firebase";
+  import { user, googleSignOut } from "$lib/utilities/auth";
   import logo from "$lib/assets/logo-purple-transparent.png";
 </script>
 

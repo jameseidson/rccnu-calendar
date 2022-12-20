@@ -1,10 +1,13 @@
 <script lang="ts">
   import "../app.css";
 
-  import { user } from "$lib/utilities/stores";
+  import { user } from "$lib/utilities/auth";
+  import { addProfile } from "$lib/utilities/database";
   import SignIn from "$lib/components/SignIn.svelte";
   import Header from "$lib/components/Header.svelte";
   import Spinner from "$lib/components/Spinner.svelte";
+
+  $: if ($user !== null && $user !== undefined) addProfile($user);
 </script>
 
 <div class="px-4">

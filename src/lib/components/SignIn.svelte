@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { googleSignIn } from "$lib/utilities/firebase";
+  import { googleSignIn } from "$lib/utilities/auth";
   import logo from "$lib/assets/logo-purple-transparent.png";
 </script>
 
