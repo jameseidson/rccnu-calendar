@@ -6,11 +6,14 @@ import { awaitable } from "./stores";
 
 const database = getDatabase(app);
 
-type ClimbLocation =
-  | "Movement Lincoln Park"
-  | "Movement Wrigleyville"
-  | "First Ascent"
-  | "Brooklyn Boulders";
+export const climbLocations = [
+  "Movement Lincoln Park",
+  "Movement Wrigleyville",
+  "First Ascent",
+  "Brooklyn Boulders",
+];
+
+export type ClimbLocation = typeof climbLocations[number];
 
 export interface Climb {
   location: ClimbLocation;
