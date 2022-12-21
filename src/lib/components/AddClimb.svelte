@@ -1,7 +1,31 @@
 <script lang="ts">
   import { Plus, Check, XMark } from "svelte-heros-v2";
 
-  import { climbLocations } from "$lib/utilities/database";
+  import {
+    climbLocations,
+    addClimb,
+    type Climb,
+  } from "$lib/utilities/database";
+  import { user } from "$lib/utilities/auth";
+
+  const submitForm = () => {
+    addClimb(
+      {
+        location: form.input.location,
+        date: new Date(form.input.date + " " + form.input.time),
+        // @ts-ignore
+        organizer: $user?.uid,
+        attendees: [],
+        withClub: false,
+      } as Climb,
+      form.input.date
+    );
+
+    // wait for the modal to close before we clear the form
+    new Promise((resolve) => setTimeout(resolve, 200)).then(
+      () => (form = emptyForm())
+    );
+  };
 
   const formDefaults: { [key: string]: string } = {
     location: "Choose a Location",
@@ -53,15 +77,7 @@
   <div class="modal-box">
     <h3 class="font-bold text-2xl">Add a Climb</h3>
 
-    <form
-      on:submit={() => {
-        console.log(JSON.stringify(form.input));
-        // wait for the modal to close before we clear the form
-        new Promise((resolve) => setTimeout(resolve, 200)).then(
-          () => (form = emptyForm())
-        );
-      }}
-    >
+    <form on:submit={submitForm}>
       <!-- Location field -->
       <div class="mt-2">
         <span class="label-text text-lg">Where are you climbing?</span>
