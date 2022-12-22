@@ -2,24 +2,25 @@
   import { Plus, Check, XMark } from "svelte-heros-v2";
 
   import {
-    climbLocations,
+    MeetLocation,
+    ClimbLocation,
     addClimb,
     type Climb,
   } from "$lib/utilities/database";
   import { user } from "$lib/utilities/auth";
+  import LocationSelector from "./LocationSelector.svelte";
 
   const submitForm = () => {
-    addClimb(
-      {
-        location: form.input.location,
-        date: new Date(form.input.date + " " + form.input.time),
-        // @ts-ignore
-        organizer: $user?.uid,
-        attendees: [],
-        withClub: false,
-      } as Climb,
-      form.input.date
-    );
+    addClimb({
+      meetLocation:
+        MeetLocation[form.input.meetLocation as keyof typeof MeetLocation],
+      meetDate: new Date(form.input.date + " " + form.input.time),
+      climbLocation:
+        ClimbLocation[form.input.climbLocation as keyof typeof ClimbLocation],
+      organizer: $user?.uid,
+      attendees: [],
+      withClub: false,
+    } as Climb);
 
     // wait for the modal to close before we clear the form
     new Promise((resolve) => setTimeout(resolve, 200)).then(
@@ -28,7 +29,8 @@
   };
 
   const formDefaults: { [key: string]: string } = {
-    location: "Choose a Location",
+    meetLocation: "Choose a place to meet",
+    climbLocation: "Choose a place to climb",
     date: "",
     time: "",
   };
@@ -60,41 +62,36 @@
         form.errors.datetime =
           "You can't schedule a climb more than a month in advance!";
         form.valid = false;
+      } else {
+        form.errors.datetime = "";
       }
     }
   }
 </script>
 
 <label
-  for="climb-adder-modal"
+  for="climb-scheduler-modal"
   class="btn btn-circle btn-success text-neutral border-0"
 >
   <Plus />
 </label>
 
-<input type="checkbox" id="climb-adder-modal" class="modal-toggle" />
+<input type="checkbox" id="climb-scheduler-modal" class="modal-toggle" />
 <div class="modal">
   <div class="modal-box">
-    <h3 class="font-bold text-2xl">Add a Climb</h3>
+    <h3 class="font-bold text-2xl">Schedule a Climb</h3>
 
     <form on:submit={submitForm}>
-      <!-- Location field -->
-      <div class="mt-2">
-        <span class="label-text text-lg">Where are you climbing?</span>
-        <select
-          bind:value={form.input.location}
-          class="select select-bordered w-full"
-        >
-          <option disabled selected>{formDefaults.location}</option>
-          {#each climbLocations as location}
-            <option>{location}</option>
-          {/each}
-        </select>
-      </div>
+      <LocationSelector
+        bind:value={form.input.meetLocation}
+        title={"Where do you want to meet?"}
+        placeholder={formDefaults.meetLocation}
+        options={MeetLocation}
+      />
 
       <!-- Date and Time field -->
       <div class="mt-2">
-        <span class="label-text text-lg">When will you go?</span>
+        <span class="label-text text-lg">When do you want to meet?</span>
         <div class="flex flex-row">
           <input
             type="date"
@@ -112,11 +109,18 @@
           <span class="label-text-alt text-error">{form.errors.datetime}</span>
         {/if}
 
+        <LocationSelector
+          bind:value={form.input.climbLocation}
+          title={"Where are you climbing?"}
+          placeholder={formDefaults.climbLocation}
+          options={ClimbLocation}
+        />
+
         <button
           type="submit"
           class={`w-full mt-4 ${form.valid ? "" : "pointer-events-none"}`}
           ><label
-            for="climb-adder-modal"
+            for="climb-scheduler-modal"
             class={`btn btn-success w-full ${
               form.valid ? "" : "btn-disabled pointer-events-none"
             }`}><Check /> Submit</label
@@ -126,7 +130,7 @@
     </form>
 
     <label
-      for="climb-adder-modal"
+      for="climb-scheduler-modal"
       class="btn btn-md btn-circle btn-ghost absolute right-2 top-2"
       ><XMark /></label
     >

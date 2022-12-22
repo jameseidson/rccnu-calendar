@@ -21,33 +21,41 @@ const climbToDb = (climb: Climb) => ({
     ),
   }),
   ...{
-    location: climb.location,
-    date: climb.date.toUTCString(),
+    meetLocation: MeetLocation[climb.meetLocation],
+    meetDate: climb.meetDate.toUTCString(),
+    climbLocation: ClimbLocation[climb.climbLocation],
     organizer: climb.organizer,
     withClub: climb.withClub,
   },
 });
 
 const climbFromDb = (entry: { [key: string]: any }): Climb => ({
-  location: entry.location,
-  date: new Date(entry.date),
+  meetLocation: entry.meetLocation,
+  meetDate: new Date(entry.meetDate),
+  climbLocation: entry.climbLocation,
   organizer: entry.organizer,
   attendees: entry.attendees ? Object.keys(entry.attendees) : [],
   withClub: entry.withClub,
 });
 
-export const climbLocations = [
+export enum MeetLocation {
+  "Stairs of Tech",
+  "Davis Station",
+  "Foster Station",
+  "Noyes Station",
+}
+
+export enum ClimbLocation {
   "Movement Lincoln Park",
   "Movement Wrigleyville",
   "First Ascent",
   "Brooklyn Boulders",
-];
-
-export type ClimbLocation = typeof climbLocations[number];
+}
 
 export interface Climb {
-  location: ClimbLocation;
-  date: Date;
+  meetLocation: MeetLocation;
+  meetDate: Date;
+  climbLocation: ClimbLocation;
   organizer: string;
   attendees: string[];
   withClub: Boolean;
@@ -61,13 +69,13 @@ export const climbs = awaitable<{ [key: string]: Climb[] }>((set) =>
       Object.entries(climbsInDb)
         .sort(
           ([, a]: any, [, b]: any) =>
-            new Date(a.date).getTime() - new Date(b.date).getTime()
+            new Date(a.meetDate).getTime() - new Date(b.meetDate).getTime()
         )
         // group the climbs by the day they occur
         .reduce((grouped: any, [id, entry]: [string, any]) => {
           const climb = climbFromDb(entry);
 
-          const day = climb.date.toLocaleDateString();
+          const day = climb.meetDate.toLocaleDateString();
           return {
             ...grouped,
             [day]: { ...(grouped[day] || {}), [id]: climb },
@@ -86,7 +94,7 @@ export const addProfile = (user: UserInfo): void => {
   });
 };
 
-export const addClimb = (climb: Climb, day: string): void => {
+export const addClimb = (climb: Climb): void => {
   const entry = climbToDb(climb);
 
   console.log(entry);
