@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { MeetLocation, ClimbLocation } from "$lib/utilities/database";
+  import type { MeetLocation, ClimbLocation } from "$lib/utilities/types";
 
   export let value: string;
   export let title: string;

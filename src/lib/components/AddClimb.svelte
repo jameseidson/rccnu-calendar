@@ -4,9 +4,9 @@
   import {
     MeetLocation,
     ClimbLocation,
-    addClimb,
     type Climb,
-  } from "$lib/utilities/database";
+  } from "$lib/utilities/types";
+  import { addClimb } from "$lib/utilities/database";
   import { user } from "$lib/utilities/auth";
   import LocationSelector from "./LocationSelector.svelte";
 
@@ -84,49 +84,48 @@
     <form on:submit={submitForm}>
       <LocationSelector
         bind:value={form.input.meetLocation}
-        title={"Where do you want to meet?"}
+        title={"When and where do you want to meet?"}
         placeholder={formDefaults.meetLocation}
         options={MeetLocation}
       />
 
       <!-- Date and Time field -->
-      <div class="mt-2">
-        <span class="label-text text-lg">When do you want to meet?</span>
-        <div class="flex flex-row">
-          <input
-            type="date"
-            bind:value={form.input.date}
-            class="input input-bordered mr-2 w-1/2"
-          />
-          <input
-            type="time"
-            step="60"
-            bind:value={form.input.time}
-            class="input input-bordered w-1/2"
-          />
-        </div>
-        {#if form.errors.datetime}
-          <span class="label-text-alt text-error">{form.errors.datetime}</span>
-        {/if}
+      <label class="input-group input-group-horizontal mt-1">
+        <input
+          type="date"
+          bind:value={form.input.date}
+          class="input input-bordered w-1/2 mr-1"
+        />
+        <input
+          type="time"
+          step="60"
+          bind:value={form.input.time}
+          class="input input-bordered w-1/2"
+        />
+      </label>
+      {#if form.errors.datetime}
+        <span class="label-text-alt text-error">{form.errors.datetime}</span>
+      {/if}
 
+      <div class="mt-4">
         <LocationSelector
           bind:value={form.input.climbLocation}
           title={"Where are you climbing?"}
           placeholder={formDefaults.climbLocation}
           options={ClimbLocation}
         />
-
-        <button
-          type="submit"
-          class={`w-full mt-4 ${form.valid ? "" : "pointer-events-none"}`}
-          ><label
-            for="climb-scheduler-modal"
-            class={`btn btn-success w-full ${
-              form.valid ? "" : "btn-disabled pointer-events-none"
-            }`}><Check /> Submit</label
-          ></button
-        >
       </div>
+
+      <button
+        type="submit"
+        class={`w-full mt-4 ${form.valid ? "" : "pointer-events-none"}`}
+        ><label
+          for="climb-scheduler-modal"
+          class={`btn btn-success w-full ${
+            form.valid ? "" : "btn-disabled pointer-events-none"
+          }`}><Check /> Submit</label
+        ></button
+      >
     </form>
 
     <label

@@ -3,14 +3,17 @@ import {
   ref,
   push,
   set,
+  get,
   child,
   onValue,
   update,
 } from "firebase/database";
 import type { UserInfo } from "firebase/auth";
 
+import { MeetLocation, ClimbLocation, type Climb } from "./types";
 import { app } from "./firebase";
 import { awaitable } from "./stores";
+import type { User } from "svelte-heros-v2";
 
 const database = getDatabase(app);
 
@@ -29,7 +32,7 @@ const climbToDb = (climb: Climb) => ({
   },
 });
 
-const climbFromDb = (entry: { [key: string]: any }): Climb => ({
+const climbFromDb = (entry: { [id: string]: any }): Climb => ({
   meetLocation: entry.meetLocation,
   meetDate: new Date(entry.meetDate),
   climbLocation: entry.climbLocation,
@@ -38,30 +41,7 @@ const climbFromDb = (entry: { [key: string]: any }): Climb => ({
   withClub: entry.withClub,
 });
 
-export enum MeetLocation {
-  "Stairs of Tech",
-  "Davis Station",
-  "Foster Station",
-  "Noyes Station",
-}
-
-export enum ClimbLocation {
-  "Movement Lincoln Park",
-  "Movement Wrigleyville",
-  "First Ascent",
-  "Brooklyn Boulders",
-}
-
-export interface Climb {
-  meetLocation: MeetLocation;
-  meetDate: Date;
-  climbLocation: ClimbLocation;
-  organizer: string;
-  attendees: string[];
-  withClub: Boolean;
-}
-
-export const climbs = awaitable<{ [key: string]: Climb[] }>((set) =>
+export const climbs = awaitable<{ [date: string]: Climb[] }>((set) =>
   onValue(ref(database, "climbs"), (snapshot) => {
     const climbsInDb: any = snapshot.val();
 
@@ -90,20 +70,24 @@ export const addProfile = (user: UserInfo): void => {
     name: user.displayName,
     email: user.email,
     phoneNumber: user.phoneNumber,
-    photoUrl: user.photoURL,
+    photoURL: user.photoURL,
   });
+};
+
+export const getProfile = async (id: string): Promise<UserInfo> => {
+  const snapshot = await get(child(ref(database), `profiles/${id}`));
+
+  return snapshot.val();
 };
 
 export const addClimb = (climb: Climb): void => {
   const entry = climbToDb(climb);
 
-  console.log(entry);
-
-  const key = push(child(ref(database), `climbs`)).key;
+  const id = push(child(ref(database), `climbs`)).key;
 
   const updates = {
-    [`/climbs/${key}`]: entry,
-    [`/users/${climb.organizer}/organizing/${key}`]: true,
+    [`/climbs/${id}`]: entry,
+    [`/users/${climb.organizer}/organizing/${id}`]: true,
   };
 
   update(ref(database), updates);
