@@ -10,9 +10,9 @@
       class="tooltip tooltip-info w-full"
       data-tip="Please use your Northwestern email!"
     >
-      <button on:click={googleSignIn} class="btn btn-primary btn-block"
-        >Sign In</button
-      >
+      <button on:click={googleSignIn} class="btn btn-primary btn-block">
+        Sign In
+      </button>
     </div>
   </div>
 </div>

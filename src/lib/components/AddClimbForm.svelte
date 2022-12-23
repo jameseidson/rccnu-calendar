@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Plus, Check, XMark } from "svelte-heros-v2";
+  import { Check, XMark } from "svelte-heros-v2";
 
   import {
     MeetLocation,
@@ -9,6 +9,8 @@
   import { addClimb } from "$lib/utilities/database";
   import { user } from "$lib/utilities/auth";
   import LocationSelector from "./LocationSelector.svelte";
+
+  export let label: string;
 
   const submitForm = () => {
     addClimb({
@@ -69,16 +71,9 @@
   }
 </script>
 
-<label
-  for="climb-scheduler-modal"
-  class="btn btn-circle btn-success text-neutral border-0"
->
-  <Plus />
-</label>
-
-<input type="checkbox" id="climb-scheduler-modal" class="modal-toggle" />
+<input type="checkbox" id={label} class="modal-toggle" />
 <div class="modal">
-  <div class="modal-box">
+  <div class="modal-box bg-neutral shadow-2xl">
     <h3 class="font-bold text-2xl">Schedule a Climb</h3>
 
     <form on:submit={submitForm}>
@@ -94,13 +89,13 @@
         <input
           type="date"
           bind:value={form.input.date}
-          class="input input-bordered w-1/2 mr-1"
+          class="input input-bordered bg-neutral w-1/2 mr-1"
         />
         <input
           type="time"
           step="60"
           bind:value={form.input.time}
-          class="input input-bordered w-1/2"
+          class="input input-bordered bg-neutral w-1/2"
         />
       </label>
       {#if form.errors.datetime}
@@ -119,19 +114,23 @@
       <button
         type="submit"
         class={`w-full mt-4 ${form.valid ? "" : "pointer-events-none"}`}
-        ><label
-          for="climb-scheduler-modal"
+      >
+        <label
+          for={label}
           class={`btn btn-success w-full ${
             form.valid ? "" : "btn-disabled pointer-events-none"
-          }`}><Check /> Submit</label
-        ></button
-      >
+          }`}
+        >
+          <Check /> Submit
+        </label>
+      </button>
     </form>
 
     <label
-      for="climb-scheduler-modal"
+      for={label}
       class="btn btn-md btn-circle btn-ghost absolute right-2 top-2"
-      ><XMark /></label
     >
+      <XMark />
+    </label>
   </div>
 </div>

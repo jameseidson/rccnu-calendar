@@ -6,20 +6,23 @@
   import Header from "$lib/components/Header.svelte";
   import Spinner from "$lib/components/Spinner.svelte";
 
+  // TODO: This is bugged, I think user will be null or undefined if it doesnt exist in database so this won't run
   $: if ($user !== null && $user !== undefined) addProfile($user);
 </script>
 
-<div class="px-4">
-  {#await user.known}
-    <div class="grid place-items-center h-screen">
-      <Spinner size="12" />
-    </div>
-  {:then _}
-    {#if $user === null}
-      <SignIn />
-    {:else}
-      <Header />
-      <slot />
-    {/if}
-  {/await}
+<div class="grid place-items-center">
+  <div class="w-11/12">
+    {#await user.known}
+      <div class="grid place-items-center h-screen">
+        <Spinner size="12" />
+      </div>
+    {:then _}
+      {#if $user === null}
+        <SignIn />
+      {:else}
+        <Header />
+        <slot />
+      {/if}
+    {/await}
+  </div>
 </div>

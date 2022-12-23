@@ -13,7 +13,6 @@ import type { UserInfo } from "firebase/auth";
 import { MeetLocation, ClimbLocation, type Climb } from "./types";
 import { app } from "./firebase";
 import { awaitable } from "./stores";
-import type { User } from "svelte-heros-v2";
 
 const database = getDatabase(app);
 
@@ -67,9 +66,8 @@ export const climbs = awaitable<{ [date: string]: Climb[] }>((set) =>
 
 export const addProfile = (user: UserInfo): void => {
   set(ref(database, `profiles/${user.uid}`), {
-    name: user.displayName,
+    displayName: user.displayName,
     email: user.email,
-    phoneNumber: user.phoneNumber,
     photoURL: user.photoURL,
   });
 };
