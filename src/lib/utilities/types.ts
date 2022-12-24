@@ -16,7 +16,7 @@ export interface Climb {
   meetLocation: MeetLocation;
   meetDate: Date;
   climbLocation: ClimbLocation;
-  organizer: string;
-  attendees: string[];
+  organizer: { id: string; displayName: string; photoURL: string };
+  attendees: { [id: string]: string };
   withClub: Boolean;
 }

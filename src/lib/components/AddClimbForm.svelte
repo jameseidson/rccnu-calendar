@@ -13,16 +13,12 @@
   export let label: string;
 
   const submitForm = () => {
-    addClimb({
-      meetLocation:
-        MeetLocation[form.input.meetLocation as keyof typeof MeetLocation],
-      meetDate: new Date(form.input.date + " " + form.input.time),
-      climbLocation:
-        ClimbLocation[form.input.climbLocation as keyof typeof ClimbLocation],
-      organizer: $user?.uid,
-      attendees: [],
-      withClub: false,
-    } as Climb);
+    addClimb(
+      MeetLocation[form.input.meetLocation as keyof typeof MeetLocation],
+      new Date(form.input.date + " " + form.input.time),
+      ClimbLocation[form.input.climbLocation as keyof typeof ClimbLocation],
+      false
+    );
 
     // wait for the modal to close before we clear the form
     new Promise((resolve) => setTimeout(resolve, 200)).then(

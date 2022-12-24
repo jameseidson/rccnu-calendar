@@ -1,5 +1,4 @@
 <script lang="ts">
-  import type { UserInfo } from "firebase/auth";
   import {
     Share,
     ArrowRight,
@@ -11,11 +10,11 @@
   import type { Climb } from "$lib/utilities/types";
 
   export let climb: Climb;
-  export let profiles: { [id: string]: UserInfo };
+
+  let numAttendees = Object.keys(climb.attendees).length;
 </script>
 
 <div class="card bg-base-100 shadow-md text-left h-min w-full">
-  <figure />
   <div class="card-body p-4">
     <div class=" flex justify-between">
       <div>
@@ -59,14 +58,12 @@
     <div class="text-md mt-4">
       <User class="inline mb-1" size="18" />
       <strong>
-        {profiles[climb.organizer].displayName}
+        {climb.organizer.displayName}
       </strong>
-      {#if climb.attendees.length > 0}
-        and <strong
-          >{`${climb.attendees.length} other${
-            climb.attendees.length === 1 ? "" : "s"
-          }`}</strong
-        >
+      {#if numAttendees > 0}
+        and <strong>
+          {`${numAttendees} other${numAttendees === 1 ? "" : "s"}`}
+        </strong>
       {/if}
     </div>
 
@@ -74,20 +71,20 @@
       <div class="avatar-group -space-x-6">
         <div class="avatar">
           <div class="w-10">
-            <img src={profiles[climb.organizer].photoURL} alt="profile icon" />
+            <img src={climb.organizer.photoURL} alt="profile icon" />
           </div>
         </div>
-        {#each climb.attendees.slice(0, 19) as attendee (attendee)}
+        {#each Object.entries(climb.attendees).slice(0, 19) as [id, photoURL] (id)}
           <div class="avatar">
             <div class="w-10">
-              <img src={profiles[attendee].photoURL} alt="profile icon" />
+              <img src={photoURL} alt="profile icon" />
             </div>
           </div>
         {/each}
-        {#if climb.attendees.length > 20}
+        {#if numAttendees > 20}
           <div class="avatar placeholder">
             <div class="w-10 bg-neutral-focus text-neutral-content">
-              <span>+{climb.attendees.length - 20}</span>
+              <span>+{numAttendees - 20}</span>
             </div>
           </div>
         {/if}

@@ -1,11 +1,8 @@
 <script lang="ts">
-  import type { UserInfo } from "firebase/auth";
-
-  import ClimbList from "$lib/components/ClimbList.svelte";
-
-  export let data: { profiles: { [key: string]: UserInfo } };
+  import { climbs } from "$lib/utilities/database";
+  import ClimbInfoList from "$lib/components/ClimbInfoList.svelte";
 </script>
 
 <div class="card bg-base-300 shadow-lg p-4 ">
-  <ClimbList profiles={data.profiles} />
+  <ClimbInfoList climbs={$climbs} />
 </div>
