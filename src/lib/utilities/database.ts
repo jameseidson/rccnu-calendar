@@ -11,7 +11,7 @@ import {
 import type { UserInfo } from "firebase/auth";
 import { get as getStore } from "svelte/store";
 
-import { MeetLocation, ClimbLocation, type Climb } from "./types";
+import { MeetLocation, ClimbLocation, type Climb, type Profile } from "./types";
 import { app } from "./firebase";
 import { awaitable } from "./stores";
 import { user } from "./auth";
@@ -56,10 +56,10 @@ export const addProfile = (user: UserInfo): void => {
     displayName: user.displayName,
     email: user.email,
     photoURL: user.photoURL,
-  });
+  } as Profile);
 };
 
-export const getProfile = async (id: string): Promise<UserInfo> => {
+export const getProfile = async (id: string): Promise<Profile> => {
   const snapshot = await get(child(ref(database), `profiles/${id}`));
 
   return snapshot.val();
@@ -77,15 +77,9 @@ export const addClimb = (
     meetLocation: meetLocation,
     meetDate: meetDate,
     climbLocation: climbLocation,
-    organizer: {
-      // @ts-ignore
-      id: organizer.uid,
-      // @ts-ignore
-      displayName: organizer.displayName,
-      // @ts-ignore
-      photoURL: organizer.photoURL,
-    },
-    withClub: false,
+    // @ts-ignore
+    organizer: { [organizer.uid]: organizer.photoURL },
+    withClub: withClub,
   });
 
   const id = push(child(ref(database), `climbs`)).key;
@@ -98,5 +92,3 @@ export const addClimb = (
 
   update(ref(database), updates);
 };
-
-// export const getClimb = (id: string): Climb => {};

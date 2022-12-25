@@ -10,19 +10,17 @@
   $: if ($user !== null && $user !== undefined) addProfile($user);
 </script>
 
-<div class="grid place-items-center">
-  <div class="w-11/12">
-    {#await user.known}
-      <div class="grid place-items-center h-screen">
-        <Spinner size="12" />
-      </div>
-    {:then _}
-      {#if $user === null}
-        <SignIn />
-      {:else}
-        <Header />
-        <slot />
-      {/if}
-    {/await}
-  </div>
+<div class="w-11/12 m-auto">
+  {#await user.known}
+    <div class="grid place-items-center h-screen">
+      <Spinner size="12" />
+    </div>
+  {:then _}
+    {#if $user === null}
+      <SignIn />
+    {:else}
+      <Header />
+      <slot />
+    {/if}
+  {/await}
 </div>

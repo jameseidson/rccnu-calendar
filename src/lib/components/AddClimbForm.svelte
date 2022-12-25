@@ -1,13 +1,8 @@
 <script lang="ts">
   import { Check, XMark } from "svelte-heros-v2";
 
-  import {
-    MeetLocation,
-    ClimbLocation,
-    type Climb,
-  } from "$lib/utilities/types";
+  import { MeetLocation, ClimbLocation } from "$lib/utilities/types";
   import { addClimb } from "$lib/utilities/database";
-  import { user } from "$lib/utilities/auth";
   import LocationSelector from "./LocationSelector.svelte";
 
   export let label: string;

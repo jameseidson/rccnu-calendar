@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Climb } from "$lib/utilities/types";
-  import ClimbInfo from "./ClimbInfo.svelte";
+  import ClimbCard from "./ClimbCard.svelte";
+  import DynamicGrid from "./DynamicGrid.svelte";
 
   export let climbs: { [id: string]: Climb };
 
@@ -32,20 +33,13 @@
       day: "numeric",
     });
   };
-
-  let innerWidth: number;
 </script>
-
-<svelte:window bind:innerWidth />
 
 {#each Object.entries(climbsByDay) as [day, onDay] (day)}
   <div class="divider text-2xl font-bold">{prettyDay(day)}</div>
-  <div
-    class={"grid gap-2 grid-cols-" +
-      (innerWidth < 900 ? "1" : innerWidth >= 1330 ? "3" : "2")}
-  >
+  <DynamicGrid>
     {#each onDay as id (id)}
-      <ClimbInfo climb={climbs[id]} />
+      <ClimbCard {id} climb={climbs[id]} />
     {/each}
-  </div>
+  </DynamicGrid>
 {/each}
