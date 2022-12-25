@@ -1,5 +1,11 @@
 <script lang="ts">
-  import { Share, ArrowRight, ArrowTopRightOnSquare } from "svelte-heros-v2";
+  import {
+    Share,
+    ArrowRight,
+    ArrowTopRightOnSquare,
+    Check,
+    ClipboardDocument,
+  } from "svelte-heros-v2";
 
   import type { Climb } from "$lib/utilities/types";
   import ClimbTitle from "./ClimbTitle.svelte";
@@ -7,19 +13,63 @@
   export let id: string;
   export let climb: Climb;
 
+  const shareableURL = `${window.location.origin}/climb/${id}`;
+  const modalId = "share-" + id;
   let numAttendees = Object.keys(climb.attendees).length;
+  let innerWidth: number;
+  let copied = false;
 </script>
+
+<svelte:window bind:innerWidth />
+
+<input type="checkbox" id={modalId} class="modal-toggle" />
+
+<label for={modalId} class="modal cursor-pointer">
+  <label class="modal-box relative p-4">
+    <h1 class="text-lg pb-2">Shareable URL</h1>
+    <div class="input-group w-full">
+      <input
+        type="text"
+        readonly
+        value={shareableURL}
+        class="input input-bordered w-full"
+      />
+      <button
+        class="btn btn-square"
+        on:click={() =>
+          navigator.clipboard.writeText(shareableURL).then(() => {
+            copied = true;
+            new Promise((resolve) => setTimeout(resolve, 450)).then(
+              () => (copied = false)
+            );
+          })}
+      >
+        {#if copied}
+          <Check />
+        {:else}
+          <ClipboardDocument />
+        {/if}
+      </button>
+    </div>
+  </label>
+</label>
 
 <div class="card bg-base-100 shadow-md text-left h-min w-full">
   <div class="card-body p-4">
-    <div class=" flex justify-between">
-      <ClimbTitle {climb} titleSize="text-xl" subtitleSize="text-lg" />
+    <div class="flex justify-between">
+      <span class="pl-2">
+        <ClimbTitle {climb} titleSize="text-xl" subtitleSize="text-lg" />
+      </span>
 
-      <ul class="menu menu-horizontal h-14 bg-base-200 rounded-box">
+      <ul
+        class={`menu rounded-box bg-base-200 ${
+          innerWidth <= 500 ? "" : "menu-horizontal h-14"
+        }`}
+      >
         <li>
-          <a>
+          <label for={modalId}>
             <Share />
-          </a>
+          </label>
         </li>
         <li>
           <a href="/climb/{id}">

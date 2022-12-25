@@ -4,8 +4,8 @@
   import type { Climb } from "$lib/utilities/types";
 
   export let climb: Climb;
-  export let titleSize: "text-3xl" | "text-2xl" | "text-xl";
-  export let subtitleSize: "text-2xl" | "text-xl" | "text-lg";
+  export let titleSize: "text-3xl" | "text-2xl" | "text-xl" | "text-lg";
+  export let subtitleSize: "text-2xl" | "text-xl" | "text-lg" | "text-md";
 </script>
 
 <div>
