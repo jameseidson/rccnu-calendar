@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { climbs } from "$lib/utilities/database";
   import type { Climb } from "$lib/utilities/types";
   import ClimbCard from "./ClimbCard.svelte";
   import DynamicGrid from "./DynamicGrid.svelte";
+
+  export let climbs: { [id: string]: Climb };
 
   const prettyDay = (day: string) => {
     const fields = day.split("/");
@@ -21,7 +22,7 @@
 
   let climbsByDay: { [day: string]: string[] };
 
-  $: climbsByDay = Object.entries($climbs)
+  $: climbsByDay = Object.entries(climbs)
     .sort(
       ([, a]: any, [, b]: any) =>
         new Date(a.meetDate).getTime() - new Date(b.meetDate).getTime()
@@ -40,7 +41,7 @@
   <div class="divider text-2xl font-bold">{prettyDay(day)}</div>
   <DynamicGrid>
     {#each onDay as id (id)}
-      <ClimbCard {id} climb={$climbs[id]} />
+      <ClimbCard {id} climb={climbs[id]} />
     {/each}
   </DynamicGrid>
 {/each}
