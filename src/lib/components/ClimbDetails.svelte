@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { MagnifyingGlass, Share, ArrowRight } from "svelte-heros-v2";
+  import { MagnifyingGlass, Share } from "svelte-heros-v2";
 
   import { getProfile } from "$lib/utilities/database";
   import type { Climb } from "$lib/utilities/types";
@@ -9,6 +9,7 @@
   import SkeletonLoader from "./SkeletonLoader.svelte";
   import DynamicMenu from "./DynamicMenu.svelte";
   import SharePopup from "./SharePopup.svelte";
+  import JoinLeaveButton from "./JoinLeaveButton.svelte";
 
   export let id: string;
   export let climb: Climb;
@@ -35,7 +36,7 @@
     <label slot="item-1" for={sharePopupId}>
       <Share />
     </label>
-    <a slot="item-2"> <ArrowRight /> </a>
+    <JoinLeaveButton {id} {climb} slot="item-2" />
   </DynamicMenu>
 </div>
 

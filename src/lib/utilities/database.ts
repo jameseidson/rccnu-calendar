@@ -78,7 +78,7 @@ export const addClimb = (
     meetDate: meetDate,
     climbLocation: climbLocation,
     // @ts-ignore
-    organizer: { [organizer.uid]: organizer.photoURL },
+    organizer: { [organizer!.uid]: organizer!.photoURL },
     withClub: withClub,
   });
 
@@ -86,8 +86,29 @@ export const addClimb = (
 
   const updates = {
     [`/climbs/${id}`]: entry,
-    //@ts-ignore
-    [`/users/${organizer.uid}/organizing/${id}`]: true,
+    [`/users/${organizer!.uid}/organizing/${id}`]: true,
+  };
+
+  update(ref(database), updates);
+};
+
+export const joinClimb = (climbId: string): void => {
+  const attendee = getStore(user);
+
+  const updates = {
+    [`climbs/${climbId}/attendees/${attendee!.uid}`]: attendee!.photoURL,
+    [`users/${attendee!.uid}/attending/${climbId}`]: true,
+  };
+
+  update(ref(database), updates);
+};
+
+export const leaveClimb = (climbId: string): void => {
+  const attendee = getStore(user);
+
+  const updates = {
+    [`climbs/${climbId}/attendees/${attendee!.uid}`]: null,
+    [`users/${attendee!.uid}/attending/${climbId}`]: null,
   };
 
   update(ref(database), updates);

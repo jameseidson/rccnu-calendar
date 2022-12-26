@@ -1,10 +1,11 @@
 <script lang="ts">
-  import { Share, ArrowRight, ArrowTopRightOnSquare } from "svelte-heros-v2";
+  import { Share, ArrowTopRightOnSquare } from "svelte-heros-v2";
 
   import type { Climb } from "$lib/utilities/types";
   import ClimbTitle from "./ClimbTitle.svelte";
   import DynamicMenu from "./DynamicMenu.svelte";
   import SharePopup from "./SharePopup.svelte";
+  import JoinLeaveButton from "./JoinLeaveButton.svelte";
 
   export let id: string;
   export let climb: Climb;
@@ -39,26 +40,26 @@
       <div class="avatar-group -space-x-6">
         <div class="avatar">
           <div class="w-10">
-            <img src={Object.values(climb.organizer)[0]} alt="profile icon" />
+            <img src={Object.values(climb.organizer)[0]} alt="organizer icon" />
           </div>
         </div>
         {#each Object.entries(climb.attendees).slice(0, 19) as [id, photoURL] (id)}
           <div class="avatar">
             <div class="w-10">
-              <img src={photoURL} alt="profile icon" />
+              <img src={photoURL} alt="attendee icon" />
             </div>
           </div>
         {/each}
         {#if numAttendees > 20}
           <div class="avatar placeholder">
-            <div class="w-10 bg-neutral-focus text-neutral-content">
+            <div class="bg-neutral-focus text-neutral-content w-10 ">
               <span>+{numAttendees - 20}</span>
             </div>
           </div>
         {/if}
       </div>
 
-      <button class="btn btn-circle btn-ghost "><ArrowRight /></button>
+      <JoinLeaveButton {id} {climb} class="btn btn-circle btn-ghost" />
     </div>
   </div>
 </div>
