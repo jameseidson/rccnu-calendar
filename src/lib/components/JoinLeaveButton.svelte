@@ -11,7 +11,8 @@
   let mouseover = false;
 </script>
 
-{#if $user.uid in climb.attendees}
+<!-- $user will never be null here, but typescript will complain if we don't check -->
+{#if $user && $user.uid in climb.attendees}
   <div
     on:click={() => leaveClimb(id)}
     on:mouseenter={() => (mouseover = true)}

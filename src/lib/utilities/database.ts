@@ -15,6 +15,7 @@ import { MeetLocation, ClimbLocation, type Climb, type Profile } from "./types";
 import { app } from "./firebase";
 import { awaitable } from "./stores";
 import { user } from "./auth";
+import defaultPhoto from "$lib/assets/default-photo.svg";
 
 const database = getDatabase(app);
 
@@ -74,8 +75,7 @@ export const addClimb = (
     meetLocation: meetLocation,
     meetDate: meetDate,
     climbLocation: climbLocation,
-    // @ts-ignore
-    attendees: { [organizer!.uid]: organizer!.photoURL },
+    attendees: { [organizer!.uid]: organizer!.photoURL || defaultPhoto },
     withClub: withClub,
   });
 
