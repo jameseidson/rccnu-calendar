@@ -11,7 +11,7 @@
   let mouseover = false;
 </script>
 
-{#if $user.uid in climb.organizer || $user.uid in climb.attendees}
+{#if $user.uid in climb.attendees}
   <div
     on:click={() => leaveClimb(id)}
     on:mouseenter={() => (mouseover = true)}

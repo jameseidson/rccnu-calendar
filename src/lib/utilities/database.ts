@@ -19,22 +19,18 @@ import { user } from "./auth";
 const database = getDatabase(app);
 
 const climbToDb = (climb: Climb) => ({
-  ...(Object.keys(climb.attendees).length && { attendees: climb.attendees }),
-  ...{
-    meetLocation: MeetLocation[climb.meetLocation],
-    meetDate: climb.meetDate.toUTCString(),
-    climbLocation: ClimbLocation[climb.climbLocation],
-    organizer: climb.organizer,
-    withClub: climb.withClub,
-  },
+  meetLocation: MeetLocation[climb.meetLocation],
+  meetDate: climb.meetDate.toUTCString(),
+  climbLocation: ClimbLocation[climb.climbLocation],
+  attendees: climb.attendees,
+  withClub: climb.withClub,
 });
 
 const climbFromDb = (entry: { [id: string]: any }): Climb => ({
   meetLocation: entry.meetLocation,
   meetDate: new Date(entry.meetDate),
   climbLocation: entry.climbLocation,
-  organizer: entry.organizer,
-  attendees: entry.attendees ? entry.attendees : {},
+  attendees: entry.attendees,
   withClub: entry.withClub,
 });
 
@@ -72,44 +68,48 @@ export const addClimb = (
   withClub: boolean
 ): void => {
   const organizer = getStore(user);
+  const rootRef = ref(database);
 
   const entry = climbToDb({
     meetLocation: meetLocation,
     meetDate: meetDate,
     climbLocation: climbLocation,
     // @ts-ignore
-    organizer: { [organizer!.uid]: organizer!.photoURL },
+    attendees: { [organizer!.uid]: organizer!.photoURL },
     withClub: withClub,
   });
 
-  const id = push(child(ref(database), `climbs`)).key;
+  const id = push(child(rootRef, `climbs`)).key;
 
   const updates = {
     [`/climbs/${id}`]: entry,
-    [`/users/${organizer!.uid}/organizing/${id}`]: true,
+    [`/users/${organizer!.uid}/attending/${id}`]: true,
   };
 
-  update(ref(database), updates);
+  update(rootRef, updates);
 };
 
 export const joinClimb = (climbId: string): void => {
   const attendee = getStore(user);
 
-  const updates = {
+  update(ref(database), {
     [`climbs/${climbId}/attendees/${attendee!.uid}`]: attendee!.photoURL,
     [`users/${attendee!.uid}/attending/${climbId}`]: true,
-  };
-
-  update(ref(database), updates);
+  });
 };
 
 export const leaveClimb = (climbId: string): void => {
   const attendee = getStore(user);
+  const rootRef = ref(database);
+  const updates = { [`users/${attendee!.uid}/attending/${climbId}`]: null };
 
-  const updates = {
-    [`climbs/${climbId}/attendees/${attendee!.uid}`]: null,
-    [`users/${attendee!.uid}/attending/${climbId}`]: null,
-  };
+  get(child(rootRef, `climbs/${climbId}/attendees/`)).then((snapshot) => {
+    if (snapshot.size === 1) {
+      updates[`climbs/${climbId}`] = null;
+    } else {
+      updates[`climbs/${climbId}/attendees/${attendee!.uid}`] = null;
+    }
 
-  update(ref(database), updates);
+    update(rootRef, updates);
+  });
 };

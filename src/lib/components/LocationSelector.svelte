@@ -11,7 +11,7 @@
   <span class="label-text text-lg">{title}</span>
   <select bind:value class="select select-bordered bg-neutral w-full">
     <option disabled selected>{placeholder}</option>
-    {#each Object.keys(options).filter((k) => isNaN(Number(k))) as option}
+    {#each Object.keys(options).filter( (k) => isNaN(Number(k)) ) as option (option)}
       <option>{option}</option>
     {/each}
   </select>

@@ -16,7 +16,6 @@
 
   const sharePopupId = "share-" + id;
   let searchQuery: string = "";
-  let organizerId = Object.keys(climb.organizer)[0];
   let attendeeIds = Object.keys(climb.attendees);
 </script>
 
@@ -40,45 +39,29 @@
   </DynamicMenu>
 </div>
 
-{#await getProfile(organizerId)}
-  <SkeletonLoader width="w-80" />
-{:then organizer}
-  <div class="text-md py-2">
-    <span class="align-middle"> Organized by </span>
-    <ProfileTeaser
-      displayName={organizer.displayName}
-      photoURL={organizer.photoURL}
-    />
-  </div>
-{/await}
+<label class="input-group input-group-sm w-full">
+  <span class="bg-base-100"><MagnifyingGlass /></span>
+  <input
+    type="text"
+    bind:value={searchQuery}
+    placeholder="Search attendees"
+    class="input input-md w-full"
+  />
+</label>
 
-{#if attendeeIds.length !== 0}
-  <label class="input-group input-group-sm w-full">
-    <span class="bg-base-100"><MagnifyingGlass /></span>
-    <input
-      type="text"
-      bind:value={searchQuery}
-      placeholder="Search attendees"
-      class="input input-md w-full"
-    />
-  </label>
-
-  <div
-    class="overflow-x-scroll overflow-y-hidden whitespace-nowrap space-x-2 w-auto h-100 pt-2 pb-4"
-  >
-    {#await Promise.all(attendeeIds.map((id) => getProfile(id)))}
-      <SkeletonLoader width="w-full" />
-    {:then attendees}
-      {#each attendees as attendee, i (attendeeIds[i])}
-        {#if attendee.displayName.includes(searchQuery)}
-          <ProfileTeaser
-            displayName={attendee.displayName}
-            photoURL={attendee.photoURL}
-          />
-        {/if}
-      {/each}
-    {/await}
-  </div>
-{:else}
-  No attendees yet!
-{/if}
+<div
+  class="overflow-x-scroll overflow-y-hidden whitespace-nowrap space-x-2 w-auto h-100 pt-2 pb-4"
+>
+  {#await Promise.all(attendeeIds.map((id) => getProfile(id)))}
+    <SkeletonLoader width="w-full" />
+  {:then attendees}
+    {#each attendees as attendee, i (attendeeIds[i])}
+      {#if attendee.displayName.includes(searchQuery)}
+        <ProfileTeaser
+          displayName={attendee.displayName}
+          photoURL={attendee.photoURL}
+        />
+      {/if}
+    {/each}
+  {/await}
+</div>

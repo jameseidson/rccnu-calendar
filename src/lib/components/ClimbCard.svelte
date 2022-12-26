@@ -38,11 +38,6 @@
 
     <div class="flex justify-between align-middle mr-1">
       <div class="avatar-group -space-x-6">
-        <div class="avatar">
-          <div class="w-10">
-            <img src={Object.values(climb.organizer)[0]} alt="organizer icon" />
-          </div>
-        </div>
         {#each Object.entries(climb.attendees).slice(0, 19) as [id, photoURL] (id)}
           <div class="avatar">
             <div class="w-10">
