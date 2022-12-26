@@ -2,7 +2,7 @@
   import { ArrowLeftOnRectangle, Plus } from "svelte-heros-v2";
 
   import { user, googleSignOut } from "$lib/utilities/auth";
-  import logo from "$lib/assets/logo-purple-transparent.png";
+  import logo from "$lib/assets/logo.png";
   import AddClimbForm from "./AddClimbForm.svelte";
 </script>
 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { googleSignIn } from "$lib/utilities/auth";
-  import logo from "$lib/assets/logo-purple-transparent.png";
+  import logo from "$lib/assets/logo-subtitle.png";
 </script>
 
 <div class="grid place-items-center h-screen">
