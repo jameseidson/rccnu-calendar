@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { MagnifyingGlass } from "svelte-heros-v2";
+  import { MagnifyingGlass, Share, ArrowRight } from "svelte-heros-v2";
 
   import { getProfile } from "$lib/utilities/database";
   import type { Climb } from "$lib/utilities/types";
@@ -7,21 +7,38 @@
   import MapDirections from "./MapDirections.svelte";
   import ProfileTeaser from "./ProfileTeaser.svelte";
   import SkeletonLoader from "./SkeletonLoader.svelte";
+  import DynamicMenu from "./DynamicMenu.svelte";
+  import SharePopup from "./SharePopup.svelte";
 
+  export let id: string;
   export let climb: Climb;
 
+  const sharePopupId = "share-" + id;
   let searchQuery: string = "";
   let organizerId = Object.keys(climb.organizer)[0];
   let attendeeIds = Object.keys(climb.attendees);
 </script>
 
+<SharePopup
+  popupId={sharePopupId}
+  shareableURL={`${window.location.origin}/climb/${id}`}
+/>
+
 <MapDirections origin={climb.meetLocation} destination={climb.climbLocation} />
 <div class="pb-4" />
 
 <div class="flex justify-between align-middle">
-  <ClimbTitle {climb} titleSize="text-3xl" subtitleSize="text-2xl" />
-  <button class="btn btn-success btn-lg text-lg h-16">Join</button>
+  <span class="pr-2">
+    <ClimbTitle {climb} titleSize="text-3xl" subtitleSize="text-2xl" />
+  </span>
+  <DynamicMenu>
+    <label slot="item-1" for={sharePopupId}>
+      <Share />
+    </label>
+    <a slot="item-2"> <ArrowRight /> </a>
+  </DynamicMenu>
 </div>
+
 {#await getProfile(organizerId)}
   <SkeletonLoader width="w-80" />
 {:then organizer}
