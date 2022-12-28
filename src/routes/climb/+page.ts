@@ -1,5 +1,5 @@
-import { redirect } from "@sveltejs/kit";
+import { redirect, type Load } from "@sveltejs/kit";
 
-export const load = () => {
+export const load: Load = () => {
   throw redirect(308, "/");
 };

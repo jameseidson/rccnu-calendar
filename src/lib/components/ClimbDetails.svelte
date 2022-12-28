@@ -6,7 +6,6 @@
   import ClimbTitle from "./ClimbTitle.svelte";
   import MapDirections from "./MapDirections.svelte";
   import ProfileTeaser from "./ProfileTeaser.svelte";
-  import SkeletonLoader from "./SkeletonLoader.svelte";
   import DynamicMenu from "./DynamicMenu.svelte";
   import SharePopup from "./SharePopup.svelte";
   import JoinLeaveButton from "./JoinLeaveButton.svelte";
@@ -53,7 +52,11 @@
   class="overflow-x-scroll overflow-y-hidden whitespace-nowrap space-x-2 w-auto h-100 pt-2 pb-4"
 >
   {#await Promise.all(attendeeIds.map((id) => getProfile(id)))}
-    <SkeletonLoader width="w-full" />
+    <div role="status" class="animate-pulse">
+      <div class="flex justify-left items-center">
+        <div class="rounded-full bg-gray-700 h-5 w-full" />
+      </div>
+    </div>
   {:then attendees}
     {#each attendees as attendee, i (attendeeIds[i])}
       {#if attendee.displayName.includes(searchQuery)}
