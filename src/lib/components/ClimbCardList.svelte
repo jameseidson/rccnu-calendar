@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Climb } from "$lib/utilities/types";
   import ClimbCard from "./ClimbCard.svelte";
-  import DynamicGrid from "./DynamicGrid.svelte";
+  import ResponsiveGrid from "./ResponsiveGrid.svelte";
 
   export let climbs: { [id: string]: Climb };
 
@@ -39,9 +39,9 @@
 
 {#each Object.entries(climbsByDay) as [day, onDay] (day)}
   <div class="divider text-2xl font-bold">{prettyDay(day)}</div>
-  <DynamicGrid>
+  <ResponsiveGrid>
     {#each onDay as id (id)}
       <ClimbCard {id} climb={climbs[id]} />
     {/each}
-  </DynamicGrid>
+  </ResponsiveGrid>
 {/each}

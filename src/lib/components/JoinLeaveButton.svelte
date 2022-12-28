@@ -1,9 +1,9 @@
 <script lang="ts">
+  import { XMark, Check, ArrowRight } from "svelte-heros-v2";
+
   import { joinClimb, leaveClimb } from "$lib/utilities/database";
   import { user } from "$lib/utilities/auth";
   import type { Climb } from "$lib/utilities/types";
-
-  import { XMark, Check, ArrowRight } from "svelte-heros-v2";
 
   export let id: string;
   export let climb: Climb;

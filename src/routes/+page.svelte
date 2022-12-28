@@ -2,7 +2,7 @@
   import { climbs } from "$lib/utilities/database";
   import ClimbCardList from "$lib/components/ClimbCardList.svelte";
   import PageMessage from "$lib/components/PageMessage.svelte";
-  import DynamicGrid from "$lib/components/DynamicGrid.svelte";
+  import ResponsiveGrid from "$lib/components/ResponsiveGrid.svelte";
 </script>
 
 <div class="card bg-base-300 shadow-lg p-4">
@@ -12,11 +12,11 @@
         <div class="grid place-items-center">
           <div class="rounded-full bg-gray-700 h-5 w-48" />
         </div>
-        <DynamicGrid>
+        <ResponsiveGrid>
           <div class="card bg-gray-700 h-40 w-full" />
           <div class="card bg-gray-700 h-40 w-full" />
           <div class="card bg-gray-700 h-40 w-full" />
-        </DynamicGrid>
+        </ResponsiveGrid>
       {/each}
     </div>
   {:then _}

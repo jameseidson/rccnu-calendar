@@ -6,7 +6,7 @@
   import ClimbTitle from "./ClimbTitle.svelte";
   import MapDirections from "./MapDirections.svelte";
   import ProfileTeaser from "./ProfileTeaser.svelte";
-  import DynamicMenu from "./DynamicMenu.svelte";
+  import ResponsiveMenu from "./ResponsiveMenu.svelte";
   import SharePopup from "./SharePopup.svelte";
   import JoinLeaveButton from "./JoinLeaveButton.svelte";
 
@@ -15,7 +15,8 @@
 
   const sharePopupId = "share-" + id;
   let searchQuery: string = "";
-  let attendeeIds = Object.keys(climb.attendees);
+  let attendeeIds: string[];
+  $: attendeeIds = Object.keys(climb.attendees);
 </script>
 
 <SharePopup
@@ -30,12 +31,12 @@
   <span class="pr-2">
     <ClimbTitle {climb} titleSize="text-3xl" subtitleSize="text-2xl" />
   </span>
-  <DynamicMenu>
+  <ResponsiveMenu>
     <label slot="item-1" for={sharePopupId}>
       <Share />
     </label>
     <JoinLeaveButton {id} {climb} slot="item-2" />
-  </DynamicMenu>
+  </ResponsiveMenu>
 </div>
 
 <label class="input-group input-group-sm w-full">

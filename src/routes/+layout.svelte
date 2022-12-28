@@ -1,14 +1,13 @@
 <script lang="ts">
   import "../app.css";
   import { googleSignOut, user } from "$lib/utilities/auth";
-  import { addProfile } from "$lib/utilities/database";
+  import { addProfileIfNew } from "$lib/utilities/database";
   import SignIn from "$lib/components/SignIn.svelte";
   import Header from "$lib/components/Header.svelte";
   import Spinner from "$lib/components/Spinner.svelte";
   import PageMessage from "$lib/components/PageMessage.svelte";
 
-  // TODO: This is bugged, I think user will be null or undefined if it doesnt exist in database so this won't run
-  // $: if ($user !== null && $user !== undefined) addProfile($user);
+  $: if ($user !== null && $user !== undefined) addProfileIfNew($user);
 </script>
 
 <div class="w-11/12 m-auto">
@@ -19,9 +18,9 @@
   {:then _}
     {#if $user === null}
       <SignIn />
-    {:else if !$user.email?.endsWith("@u.northwestern.edu")}
+    {:else if !$user.email || !$user.email.endsWith("@u.northwestern.edu")}
       <PageMessage>
-        You must sign in with a Northwestern email address to see available
+        You must sign in with your Northwestern gmail account to see available
         climbs.
         <button class="btn btn-error mt-4" on:click={googleSignOut}>
           Sign Out

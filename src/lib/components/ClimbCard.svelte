@@ -3,7 +3,7 @@
 
   import type { Climb } from "$lib/utilities/types";
   import ClimbTitle from "./ClimbTitle.svelte";
-  import DynamicMenu from "./DynamicMenu.svelte";
+  import ResponsiveMenu from "./ResponsiveMenu.svelte";
   import SharePopup from "./SharePopup.svelte";
   import JoinLeaveButton from "./JoinLeaveButton.svelte";
 
@@ -26,14 +26,14 @@
         <ClimbTitle {climb} titleSize="text-xl" subtitleSize="text-lg" />
       </span>
 
-      <DynamicMenu>
+      <ResponsiveMenu>
         <label slot="item-1" for={sharePopupId}>
           <Share />
         </label>
         <a slot="item-2" href="/climb/{id}">
           <ArrowTopRightOnSquare />
         </a>
-      </DynamicMenu>
+      </ResponsiveMenu>
     </div>
 
     <div class="flex justify-between align-middle mr-1">

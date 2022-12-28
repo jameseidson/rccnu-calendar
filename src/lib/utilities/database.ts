@@ -48,12 +48,17 @@ export const climbs = awaitable<{ [id: string]: Climb }>((set) =>
   })
 );
 
-export const addProfile = (user: UserInfo): void => {
-  set(ref(database, `profiles/${user.uid}`), {
-    displayName: user.displayName,
-    email: user.email,
-    photoURL: user.photoURL,
-  } as Profile);
+export const addProfileIfNew = (user: UserInfo): void => {
+  const userRef = ref(database, `profiles/${user.uid}`);
+  get(userRef).then((snapshot) => {
+    if (!snapshot.exists()) {
+      set(userRef, {
+        displayName: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+      } as Profile);
+    }
+  });
 };
 
 export const getProfile = async (id: string): Promise<Profile> => {
