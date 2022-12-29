@@ -21,7 +21,7 @@ const database = getDatabase(app);
 
 const climbToDb = (climb: Climb) => ({
   meetLocation: MeetLocation[climb.meetLocation],
-  meetDate: climb.meetDate.toUTCString(),
+  meetDate: climb.meetDate.valueOf(),
   climbLocation: ClimbLocation[climb.climbLocation],
   attendees: climb.attendees,
   withClub: climb.withClub,
