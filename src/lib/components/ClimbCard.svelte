@@ -41,7 +41,11 @@
         {#each Object.entries(climb.attendees).slice(0, 19) as [id, photoURL] (id)}
           <div class="avatar">
             <div class="w-10">
-              <img src={photoURL} alt="attendee icon" />
+              <img
+                src={photoURL}
+                referrerpolicy="no-referrer"
+                alt="attendee icon"
+              />
             </div>
           </div>
         {/each}

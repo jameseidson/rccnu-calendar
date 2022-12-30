@@ -6,7 +6,7 @@
 <span class="align-middle whitespace-nowrap">
   <span class="avatar align-middle">
     <div class="w-6 rounded-full">
-      <img src={photoURL} alt="profile icon" />
+      <img src={photoURL} referrerpolicy="no-referrer" alt="profile icon" />
     </div>
   </span>
 

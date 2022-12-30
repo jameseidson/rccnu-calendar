@@ -1,6 +1,65 @@
 {
   "rules": {
-    ".read": false,
-    ".write": false
+    "climbs": {
+      ".read": true,
+      ".write": false,
+      "$climb_id": {
+        ".write": "(data.exists() && !newData.exists() && data.child('attendees').hasChild(auth.uid) && !newData.child('attendees').exists()) || (!data.exists() && newData.exists() && newData.child('attendees').hasChild(auth.uid) && newData.child('withClub').val() === false) && root.child('profiles').hasChild(auth.uid) && auth.token.email_verified == true && auth.token.email.matches(/.*@u.northwestern.edu$/)",
+        ".validate": "newData.hasChildren(['meetLocation', 'meetDate', 'climbLocation', 'withClub', 'attendees'])",
+
+        "meetLocation": {
+          ".validate": "root.child('meetLocations').hasChild(newData.val())"
+        },
+        "climbLocation": {
+          ".validate": "root.child('climbLocations').hasChild(newData.val())"
+        },
+        "meetDate": {
+          ".validate": "newData.isNumber() && newData.val() >= now - 1000 && newData.val() <= now + 2592000000"
+        },
+        "attendees": {
+          "$attendee_id": {
+            ".write": "$attendee_id === auth.uid",
+            ".validate": "root.child('profiles').hasChild($attendee_id) && newData.isString()"
+          }
+        },
+        "withClub": {
+          ".write": "!data.exists() && newData.val() === false || auth.token.admin === true",
+          ".validate": "newData.isBoolean()"
+        },
+        "$other": { ".validate": "false" }
+      }
+    },
+
+    "profiles": {
+      ".read": "auth.token.email_verified == true && auth.token.email.matches(/.*@u.northwestern.edu$/)",
+      ".write": false,
+      "$user_id": {
+        ".write": "$user_id == auth.uid && auth.token.email_verified == true && auth.token.email.matches(/.*@u.northwestern.edu$/)",
+        ".validate": "newData.hasChildren(['displayName', 'email', 'photoURL'])",
+
+        "displayName": { ".validate": "newData.isString()" },
+        "email": {
+          ".validate": "newData.isString() && newData.val().matches(/^[A-Z0-9._%+-]+@u.northwestern.edu$/i)"
+        },
+        "photoURL": { ".validate": "newData.isString()" },
+        "$other": { ".validate": "false" }
+      }
+    },
+
+    "users": {
+      ".read": false,
+      ".write": false,
+      "$user_id": {
+        ".read": "$user_id == auth.uid && auth.token.email_verified == true && auth.token.email.matches(/.*@u.northwestern.edu$/)",
+        ".write": "$user_id == auth.uid && auth.token.email_verified == true && auth.token.email.matches(/.*@u.northwestern.edu$/)",
+        ".validate": "root.child('profiles').hasChild($user_id) && newData.hasChildren(['attending']) ",
+
+        "attending": {
+          "$climb_id": {
+            "$any": { ".validate": "newData.isBoolean()" }
+          }
+        }
+      }
+    }
   }
 }

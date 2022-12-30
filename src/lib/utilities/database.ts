@@ -36,16 +36,18 @@ const climbFromDb = (entry: { [id: string]: any }): Climb => ({
 });
 
 export const climbs = awaitable<{ [id: string]: Climb }>((set) =>
-  onValue(ref(database, "climbs"), (snapshot) => {
-    set(
-      Object.fromEntries(
-        Object.entries(snapshot.val()).map(([id, entry]: [string, any]) => [
-          id,
-          climbFromDb(entry),
-        ])
-      )
-    );
-  })
+  onValue(ref(database, "climbs"), (snapshot) =>
+    snapshot.exists()
+      ? set(
+          Object.fromEntries(
+            Object.entries(snapshot.val()).map(([id, entry]: [string, any]) => [
+              id,
+              climbFromDb(entry),
+            ])
+          )
+        )
+      : set({})
+  )
 );
 
 export const addProfileIfNew = (user: UserInfo): void => {

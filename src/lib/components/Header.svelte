@@ -34,7 +34,11 @@
     <div class="dropdown dropdown-end">
       <label tabindex="0" class="btn btn-circle btn-ghost btn-lg p-1 avatar">
         <div class="w-full rounded-full">
-          <img src={$user?.photoURL} alt="profile icon" />
+          <img
+            src={$user?.photoURL}
+            referrerpolicy="no-referrer"
+            alt="profile icon"
+          />
         </div>
       </label>
       <ul

@@ -1,13 +1,10 @@
 <script lang="ts">
   import "../app.css";
   import { googleSignOut, user } from "$lib/utilities/auth";
-  import { addProfileIfNew } from "$lib/utilities/database";
   import SignIn from "$lib/components/SignIn.svelte";
   import Header from "$lib/components/Header.svelte";
   import Spinner from "$lib/components/Spinner.svelte";
   import PageMessage from "$lib/components/PageMessage.svelte";
-
-  $: if ($user !== null && $user !== undefined) addProfileIfNew($user);
 </script>
 
 <div class="w-11/12 m-auto">
